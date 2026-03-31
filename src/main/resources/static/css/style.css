@@ -1,0 +1,48 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', Arial, Sans-serif; background: #f0f4f8; color: #1e293b;
+    line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column;
+}
+
+
+/* 본문 컨테이너: 가운데 정렬 및 여백 */
+.postList-container {
+    max-width: 1100px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+/* 테이블 스타일: 선을 없애고 하단 라인만 강조 (요즘 스타일) */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th {
+    border-bottom: 2px solid #333; /* 헤더 아래쪽만 진하게 */
+    padding: 15px;
+    text-align: left;
+    background-color: #f9f9f9;
+}
+
+td {
+    border-bottom: 1px solid #eee; /* 줄 사이에는 연한 선 */
+    padding: 15px;
+}
+
+tr:hover {
+    background-color: #fcfcfc; /* 마우스 올렸을 때 효과 */
+}
+
+/* 버튼 스타일 */
+.add-post-btn {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    float: right; /* 오른쪽 정렬 */
+    margin-top: 10px;
+}
