@@ -1,8 +1,8 @@
 package com.hometalk.onepass.parking.entity;
 
 
-import com.hometalk.onepass.entity.BaseTimeEntity;
-import com.hometalk.onepass.entity.auth.User;
+import com.hometalk.onepass.baseentity.BaseTimeEntity;
+import com.hometalk.onepass.auth.entity.auth.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

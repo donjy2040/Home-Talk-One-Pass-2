@@ -1,4 +1,4 @@
-package com.hometalk.onepass.entity;
+package com.hometalk.onepass.baseentity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;

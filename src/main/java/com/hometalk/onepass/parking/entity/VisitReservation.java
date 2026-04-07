@@ -1,7 +1,7 @@
 package com.hometalk.onepass.parking.entity;
 
-import com.hometalk.onepass.entity.BaseSoftDeleteEntity;
-import com.hometalk.onepass.entity.auth.Household;
+import com.hometalk.onepass.baseentity.BaseSoftDeleteEntity;
+import com.hometalk.onepass.auth.entity.auth.Household;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package com.hometalk.onepass.entity.notification;
+package com.hometalk.onepass.baseentity.notification;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

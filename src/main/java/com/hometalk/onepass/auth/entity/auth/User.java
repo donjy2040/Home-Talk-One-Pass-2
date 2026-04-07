@@ -1,6 +1,6 @@
-package com.hometalk.onepass.entity.auth;
+package com.hometalk.onepass.auth.entity.auth;
 
-import com.hometalk.onepass.entity.BaseSoftDeleteEntity;
+import com.hometalk.onepass.baseentity.BaseSoftDeleteEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseSoftDeleteEntity {
@@ -23,9 +23,6 @@ public class User extends BaseSoftDeleteEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "household_id")
     private Household household;
-
-    @Column(name = "login_id", nullable = false, length = 100)
-    private String loginId;
 
     @Column(name = "name", nullable = false, length = 50)
     private String name;
@@ -55,9 +52,8 @@ public class User extends BaseSoftDeleteEntity {
     private List<SocialAccount> socialAccounts = new ArrayList<>();
 
     @Builder
-    public User(String loginId, String name, String nickname, String email,
+    public User(String name, String nickname, String email,
                 String phoneNumber, UserStatus status, UserRole role) {
-        this.loginId = loginId;
         this.name = name;
         this.nickname = nickname;
         this.email = email;

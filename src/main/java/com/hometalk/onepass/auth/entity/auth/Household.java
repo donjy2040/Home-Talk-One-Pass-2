@@ -1,4 +1,4 @@
-package com.hometalk.onepass.entity.auth;
+package com.hometalk.onepass.auth.entity.auth;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

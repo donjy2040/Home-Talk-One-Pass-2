@@ -1,6 +1,6 @@
 package com.hometalk.onepass.controller;
 
-import com.hometalk.onepass.entity.auth.User;
+import com.hometalk.onepass.auth.entity.auth.User;
 import com.hometalk.onepass.auth.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
