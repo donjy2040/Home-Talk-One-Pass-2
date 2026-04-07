@@ -1,7 +1,8 @@
 package com.hometalk.onepass.notice.entity;
 
 
-import com.hometalk.onepass.common.entity.CommonEntity;
+
+import com.hometalk.onepass.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -9,13 +10,11 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Table(name = "")
-public class Attachment extends CommonEntity {
+public class Attachment extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String targetType;
-    private Long targetId;
+    private Long noticeId;
     private String fileName;
     private String filePath;
     private int fileSize;

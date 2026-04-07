@@ -1,6 +1,6 @@
 package com.hometalk.onepass.schedule.entity;
 
-import com.hometalk.onepass.common.entity.CommonEntity;
+import com.hometalk.onepass.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -8,20 +8,19 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-@AttributeOverrides({
-        @AttributeOverride(name = "title", column = @Column(nullable = false))
-})
-public class Schedule extends CommonEntity {
+public class Schedule extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long userId;
-    private String targetType;
-    private Long targetId;
+    private Long noticeId;
+
+    @Column(nullable = false, length = 100)
+    private String title;
+
     private String info;
     private String location;
     private String referenceUrl;
     private LocalDateTime startAt;
     private LocalDateTime endAt;
-
 }

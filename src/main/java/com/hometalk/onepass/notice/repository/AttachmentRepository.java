@@ -1,4 +1,4 @@
-// AttachmentRepository.java
+
 package com.hometalk.onepass.notice.repository;
 
 import com.hometalk.onepass.notice.entity.Attachment;

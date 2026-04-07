@@ -1,22 +1,26 @@
 package com.hometalk.onepass.notice.entity;
 
-import com.hometalk.onepass.common.entity.CommonEntity;
+import com.hometalk.onepass.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
 @Data
-@AttributeOverrides({
-        @AttributeOverride(name = "title", column = @Column(nullable = false)),
-        @AttributeOverride(name = "content", column = @Column(nullable = false))
-})
-public class Notice extends CommonEntity {
+public class Notice extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long userId;
+
+    @Column(nullable = false, length = 100)
+    private String title;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String content;
+
     private boolean isPinned;
     private int viewCount;
+
     @Enumerated(EnumType.STRING)
     private Badge badge;
 }
