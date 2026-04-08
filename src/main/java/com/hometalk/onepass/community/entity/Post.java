@@ -22,7 +22,7 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    @Lob @Column(columnDefinition = "Text")
+    @Lob @Column(columnDefinition = "TEXT")
     private String content;
     private boolean pinned = false;
     private int viewCount = 0;
@@ -43,6 +43,7 @@ public class Post {
     @Enumerated(EnumType.STRING)
     private PostStatus status = PostStatus.ACTIVE;
 
+    // BaseTimeEntity 상속받으면 이 필드들은 삭제
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
