@@ -1,14 +1,10 @@
 package com.hometalk.onepass.entity.dashboard;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,8 +16,9 @@ import java.util.List;
 public class BillingUser {
 
     @Id // 1. PK로 지정
-    // @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동 생성이 필요하다면 추가
     private Long userId;
+    // @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동 생성이 필요하다면 추가
+
 
     @Enumerated(EnumType.STRING) // 2. Enum 타입 처리 (STATUS가 enum인 경우)
     private STATUS status;
