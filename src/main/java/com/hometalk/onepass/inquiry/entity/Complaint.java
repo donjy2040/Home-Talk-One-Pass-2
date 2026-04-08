@@ -6,6 +6,8 @@ import com.hometalk.onepass.auth.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -62,4 +64,8 @@ public class Complaint {
         this.answer = response;
         this.status = "처리완료";
     }
+
+    // 파일 업로드
+    @OneToMany(mappedBy = "complaint", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ComplaintAttachment> attachments = new ArrayList<>();
 }

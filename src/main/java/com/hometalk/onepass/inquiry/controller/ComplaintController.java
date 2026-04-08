@@ -6,7 +6,9 @@ import com.hometalk.onepass.inquiry.entity.Complaint;
 import com.hometalk.onepass.inquiry.service.ComplaintService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -18,10 +20,10 @@ public class ComplaintController {
     private final UserRepository userRepository;
 
     // 민원 등록
-    @PostMapping
-    public Long register(@RequestBody ComplaintDto dto) {
-
-        return complaintService.register(dto);
+    @PostMapping(consumes = {"multipart/form-data"})
+    public Long register(@RequestParam("dto") ComplaintDto dto,
+                         @RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException {
+                return complaintService.saveWithFiles(dto, files);
     }
 
     // 전체 민원 조회
@@ -49,4 +51,7 @@ public class ComplaintController {
     public void delete(@PathVariable Long id) {
         complaintService.delete(id);
     }
+
+    // 파일 업로드
+
 }

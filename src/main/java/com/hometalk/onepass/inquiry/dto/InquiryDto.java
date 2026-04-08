@@ -1,5 +1,6 @@
 package com.hometalk.onepass.inquiry.dto;
 
+import com.hometalk.onepass.inquiry.entity.Complaint;
 import com.hometalk.onepass.inquiry.entity.Inquiry;
 import lombok.*;
 
@@ -32,5 +33,16 @@ public class InquiryDto {
                 .updatedAt(inquiry.getUpdatedAt())
                 .build();
 
+    }
+
+// ... 기존 코드들 ...
+
+    public Inquiry toEntity() {
+        return Inquiry.builder()
+                .title(this.title)
+                .content(this.content)
+                .category(this.category)
+                .status(this.status != null ? this.status : "미답변") // 기본값 세팅
+                .build();
     }
 }

@@ -35,4 +35,12 @@ public class ComplaintDto {
                 .updatedAt(complaint.getUpdatedAt())
                 .build();
     }
+    public Complaint toEntity() {
+        return Complaint.builder()
+                .title(this.title)
+                .content(this.content)
+                .category(this.category)
+                .isSecret(this.isSecret)
+                .build();
+    }
 }
