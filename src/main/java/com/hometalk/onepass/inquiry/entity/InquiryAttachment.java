@@ -11,20 +11,14 @@ import lombok.*;
 @Table(name = "kjh_inquiry_attachment")
 public class InquiryAttachment {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String originFileName;
+    private String storedFileName;
+    private String filePath;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "inquiry_id")
-    private Inquiry inquiry; // Complaint가 아닌 Inquiry와 연결!
-
-    @Column(nullable = false)
-    private String originFileName;
-
-    @Column(nullable = false)
-    private String storedFileName;
-
-    @Column(nullable = false)
-    private String filePath;
+    private Inquiry inquiry;
 }
