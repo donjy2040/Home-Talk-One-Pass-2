@@ -17,6 +17,9 @@ public interface VehicleService {
     // 세대별 차량 목록 조회
     List<VehicleResponse> getHouseholdVehicles(Long householdId);
 
+    // 차량 단건 조회
+    VehicleResponse getVehicle(Long vehicleId);
+
     // 반려 사유 조회
     String getRejectReason(Long vehicleId);
 
