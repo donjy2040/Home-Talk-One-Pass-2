@@ -6,13 +6,11 @@ import com.hometalk.onepass.auth.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Table(name = "vehicles")
 @Getter
 @NoArgsConstructor
-@SQLRestriction("is_deleted = false")
 public class Vehicle extends BaseSoftDeleteEntity {
 
     @Id

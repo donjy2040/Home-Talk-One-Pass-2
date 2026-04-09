@@ -62,7 +62,10 @@ public class VehicleController {
     // 차량 재신청 페이지
     @GetMapping("/vehicle/reapply/{vehicleId}")
     public String vehicleReapplyPage(@PathVariable Long vehicleId, Model model) {
-        model.addAttribute("vehicleId", vehicleId);
+        VehicleResponse vehicle = vehicleService.getVehicle(vehicleId);
+        String rejectReason = vehicleService.getRejectReason(vehicleId);
+        model.addAttribute("vehicle", vehicle);
+        model.addAttribute("rejectReason", rejectReason);
         return "parking/vehicle-reapply";
     }
 

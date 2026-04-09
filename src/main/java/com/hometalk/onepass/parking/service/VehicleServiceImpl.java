@@ -166,4 +166,13 @@ public class VehicleServiceImpl implements VehicleService {
         approval.reject(user, rejectReason);
         approval.getVehicle().reject();
     }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public VehicleResponse getVehicle(Long vehicleId) {
+        Vehicle vehicle = vehicleRepository.findById(vehicleId)
+                .orElseThrow(() -> new EntityNotFoundException("차량을 찾을 수 없습니다."));
+        return new VehicleResponse(vehicle);
+    }
 }
