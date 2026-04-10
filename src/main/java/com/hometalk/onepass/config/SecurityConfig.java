@@ -22,9 +22,10 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/auth")            // 1. 사용자 정의 로그인 페이지 경로
                         .loginProcessingUrl("/login") // 2. 로그인 실행(POST) 시 호출할 경로
-                        .defaultSuccessUrl("/home")   // 3. 로그인 성공 시 이동할 경로
+                        .defaultSuccessUrl("/index", true)   // 3. 로그인 성공 시 이동할 경로
                         .failureUrl("/?error=true")   // 4. 로그인 실패 시 이동할 경로
                         .permitAll()                  // 5. 로그인 페이지는 누구나 접근 가능해야 함
+                        .usernameParameter("loginId") // username이 아닌 login_id으로 name 설정
                 )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/") // 로그아웃 성공 시 이동할 페이지

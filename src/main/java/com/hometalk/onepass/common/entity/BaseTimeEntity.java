@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:src/main/java/com/hometalk/onepass/baseentity/BaseTimeEntity.java
-package com.hometalk.onepass.baseentity;
-========
 package com.hometalk.onepass.common.entity;
->>>>>>>> origin/develop:src/main/java/com/hometalk/onepass/common/entity/BaseTimeEntity.java
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

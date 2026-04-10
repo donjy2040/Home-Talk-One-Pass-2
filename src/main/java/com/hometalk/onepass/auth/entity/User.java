@@ -1,12 +1,7 @@
-<<<<<<<< HEAD:src/main/java/com/hometalk/onepass/auth/entity/auth/User.java
-package com.hometalk.onepass.auth.entity.auth;
-
-import com.hometalk.onepass.baseentity.BaseSoftDeleteEntity;
-========
 package com.hometalk.onepass.auth.entity;
-
 import com.hometalk.onepass.common.entity.BaseSoftDeleteEntity;
->>>>>>>> origin/develop:src/main/java/com/hometalk/onepass/auth/entity/User.java
+
+
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.hometalk.onepass.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.hometalk.onepass.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/onepass.main.iml" filepath="$PROJECT_DIR$/.idea/modules/onepass.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/onepass_main.iml" filepath="$PROJECT_DIR$/.idea/modules/onepass_main.iml" group="onepass" />
     </modules>
   </component>
 </project>

@@ -1,8 +1,5 @@
-<<<<<<<< HEAD:src/main/java/com/hometalk/onepass/baseentity/BaseSoftDeleteEntity.java
-package com.hometalk.onepass.baseentity;
-========
 package com.hometalk.onepass.common.entity;
->>>>>>>> origin/develop:src/main/java/com/hometalk/onepass/common/entity/BaseSoftDeleteEntity.java
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;

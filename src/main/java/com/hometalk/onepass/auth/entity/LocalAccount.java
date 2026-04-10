@@ -1,12 +1,6 @@
-<<<<<<<< HEAD:src/main/java/com/hometalk/onepass/auth/entity/auth/LocalAccount.java
-package com.hometalk.onepass.auth.entity.auth;
-
-import com.hometalk.onepass.baseentity.BaseTimeEntity;
-========
 package com.hometalk.onepass.auth.entity;
 
 import com.hometalk.onepass.common.entity.BaseTimeEntity;
->>>>>>>> origin/develop:src/main/java/com/hometalk/onepass/auth/entity/LocalAccount.java
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -30,8 +24,8 @@ public class LocalAccount extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "login_email", nullable = false, unique = true, length = 100)
-    private String loginEmail;
+    @Column(name = "login_id", nullable = false, unique = true, length = 100)
+    private String loginId;
 
     @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
@@ -43,10 +37,10 @@ public class LocalAccount extends BaseTimeEntity {
     private String emailVerifyToken;
 
     @Builder
-    public LocalAccount(User user, String loginEmail, String passwordHash,
+    public LocalAccount(User user, String loginId, String passwordHash,
                         String emailVerifyToken) {
         this.user = user;
-        this.loginEmail = loginEmail;
+        this.loginId = loginId;
         this.passwordHash = passwordHash;
         this.emailVerified = false;
         this.emailVerifyToken = emailVerifyToken;

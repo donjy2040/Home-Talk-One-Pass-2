@@ -1,12 +1,6 @@
-<<<<<<<< HEAD:src/main/java/com/hometalk/onepass/auth/entity/auth/SocialAccount.java
-package com.hometalk.onepass.auth.entity.auth;
-
-import com.hometalk.onepass.baseentity.BaseTimeEntity;
-========
 package com.hometalk.onepass.auth.entity;
-
 import com.hometalk.onepass.common.entity.BaseTimeEntity;
->>>>>>>> origin/develop:src/main/java/com/hometalk/onepass/auth/entity/SocialAccount.java
+
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:src/main/java/com/hometalk/onepass/auth/entity/auth/Household.java
-package com.hometalk.onepass.auth.entity.auth;
-========
 package com.hometalk.onepass.auth.entity;
->>>>>>>> origin/develop:src/main/java/com/hometalk/onepass/auth/entity/Household.java
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
