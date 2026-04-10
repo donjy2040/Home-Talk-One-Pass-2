@@ -50,13 +50,10 @@ public class BillingUploadService {
             boolean hasError = validationError != null;
             if (hasError) errorCount++;
 
-            UpsertType upsertType = UpsertType.ERROR;
-            if (!hasError) {
-                Optional<Billing> existing = billingRepository
-                        .findByHousehold_IdAndBillingMonth(
-                                row.getHouseholdId(), row.getBillingMonth());
-                upsertType = existing.isPresent() ? UpsertType.UPDATE : UpsertType.INSERT;
-            }
+            // TODO: HouseholdRepository 머지 후 실제 UPSERT 판별로 교체
+            // 현재는 household_id가 String("101-101")이라 DB 조회 불가
+            // 머지 후: billingRepository.findByHousehold_IdAndBillingMonth(householdId, month)
+            UpsertType upsertType = hasError ? UpsertType.ERROR : UpsertType.INSERT;
 
             previewRows.add(UploadPreviewRow.builder()
                     .num(num)
@@ -85,64 +82,34 @@ public class BillingUploadService {
 
             if (validate(row) != null) continue;
 
-            // TODO: HouseholdRepository 머지 후 아래 주석 해제
-        //    Household household = householdRepository.findById(row.getHouseholdId())
-        //            .orElseThrow(() -> new IllegalArgumentException(
-        //                    "존재하지 않는 세대입니다. id=" + row.getHouseholdId()));
+            // TODO: HouseholdRepository 머지 후 실제 household 조회로 교체
+            // Household household = householdRepository.findById(row.getHouseholdId())...
 
-            Optional<Billing> existing = billingRepository
-                    .findByHousehold_IdAndBillingMonth(
-                            row.getHouseholdId(), row.getBillingMonth());
+            // HouseholdRepository 연동 전 임시 처리 — 전체 스킵
+            insertCount++;
+            continue;
 
-            Billing billing;
-
-            if (existing.isPresent()) {
-                // UPDATE
-                billing = existing.get();
-                billing.updateByUpload(row.getTotalAmount(), row.getDueDate());
-                billingDetailRepository.deleteByBilling_Id(billing.getId());
-                updateCount++;
-
-            } else {
-                // TODO: HouseholdRepository 머지 후 아래 주석 해제
-                // Household household = householdRepository.findById(row.getHouseholdId())
-                //         .orElseThrow(() -> new IllegalArgumentException(
-                //                 "존재하지 않는 세대입니다. id=" + row.getHouseholdId()));
-
-                // HouseholdRepository 연동 전 임시 처리 — INSERT 스킵
-                insertCount++;
-                continue; // TODO: 머지 후 아래 billing 생성 코드로 교체
-
-                // billing = billingRepository.save(Billing.builder()
-                //         .household(household)
-                //         .billingMonth(row.getBillingMonth())
-                //         .dueDate(row.getDueDate())
-                //         .totalAmount(row.getTotalAmount())
-                //         .status(BillingStatus.UNPAID)
-                //         .build());
-            }
-
-// billing_details 저장
-            List<BillingDetail> details = new ArrayList<>();
-            List<ItemRow> items = row.getItems();
-            for (int i = 0; i < items.size(); i++) {
-                details.add(BillingDetail.builder()
-                        .billing(billing)
-                        .itemName(items.get(i).getItemName())
-                        .itemAmount(items.get(i).getItemAmount())
-                        .sortOrder(i)
-                        .build());
-            }
-            billingDetailRepository.saveAll(details);
-
-// billing_logs UPLOAD 기록
-            billingLogRepository.save(BillingLog.builder()
-                    .billing(billing)
-                    .userId(adminId)
-                    .actionType(BillingActionType.UPLOAD)
-                    .build());
-
-
+            // ── 아래는 HouseholdRepository 머지 후 활성화 ──────────────
+            // Optional<Billing> existing = billingRepository
+            //         .findByHousehold_IdAndBillingMonth(
+            //                 householdId, row.getBillingMonth());
+            // Billing billing;
+            // if (existing.isPresent()) {
+            //     billing = existing.get();
+            //     billing.updateByUpload(row.getTotalAmount(), row.getDueDate());
+            //     billingDetailRepository.deleteByBilling_Id(billing.getId());
+            //     updateCount++;
+            // } else {
+            //     billing = billingRepository.save(Billing.builder()
+            //             .household(household)
+            //             .billingMonth(row.getBillingMonth())
+            //             .dueDate(row.getDueDate())
+            //             .totalAmount(row.getTotalAmount())
+            //             .status(BillingStatus.UNPAID)
+            //             .build());
+            //     insertCount++;
+            // }
+            // ... billing_details, billing_logs 저장
         }
 
         return new UploadConfirmResult(insertCount, updateCount);
@@ -153,7 +120,7 @@ public class BillingUploadService {
     // ─────────────────────────────────────────────
 
     private String validate(UploadRow row) {
-        if (row.getHouseholdId() == null) return "세대 정보 누락";
+        if (row.getHouseholdId() == null || row.getHouseholdId().isBlank()) return "세대 정보 누락";
         if (row.getBillingMonth() == null || row.getBillingMonth().isBlank()) return "부과월 누락";
         if (row.getTotalAmount() == null || row.getTotalAmount().compareTo(BigDecimal.ZERO) < 0) return "금액 누락";
         if (row.getDueDate() == null) return "납기일 누락";
@@ -168,7 +135,7 @@ public class BillingUploadService {
     @Getter
     @Builder
     public static class UploadRow {
-        private Long          householdId;
+        private String          householdId;
         private String        billingMonth;
         private LocalDate     dueDate;
         private BigDecimal    totalAmount;
@@ -186,7 +153,7 @@ public class BillingUploadService {
     @Builder
     public static class UploadPreviewRow {
         private int        num;
-        private Long       householdId;
+        private String     householdId;
         private String     billingMonth;
         private BigDecimal totalAmount;
         private String     validationError;

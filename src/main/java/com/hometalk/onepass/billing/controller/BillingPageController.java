@@ -74,7 +74,8 @@ public class BillingPageController {
 
     @GetMapping("/admin/upload")
     public String uploadPage(Model model) {
-        model.addAttribute("menu", "billing");  // 추가
+        model.addAttribute("menu",        "billing");
+        model.addAttribute("contextPath", "/hometop"); // 추가
         return "billing/billing_admin_upload";
     }
 

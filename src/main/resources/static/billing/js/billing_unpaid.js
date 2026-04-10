@@ -1,6 +1,6 @@
 // 필터 변경 시 GET /api/billing/admin/unpaid 재조회
 // → tbody 교체, 납부완료 처리 confirm 후
-// PATCH /api/billing/admin/{id}/pay 호출
+// PATCH /api/billing/admin/{id}/paid 호출
 // → 해당 행 즉시 업데이트
 
 /* ================================================================
@@ -96,7 +96,7 @@ function buildMonthGrid() {
 }
 
 function buildDongGrid() {
-    // 동 목록은 서버에서 내려주는 게 정확하므로 현재 tbody에서 파싱
+    // 동 목록은 현재 tbody에서 파싱
     const dongs = [...new Set(
         [...document.querySelectorAll('#billingTableBody tr td:nth-child(2)')]
             .map(td => td.textContent.replace(/\d+호$/, '').trim())
@@ -115,10 +115,10 @@ function buildDongGrid() {
 
 function buildUnpaidFilterGrid() {
     const opts = [
-        { val: 'all',    label: '전체'          },
-        { val: 'unpaid', label: '미납만 보기'    },
+        { val: 'all',    label: '전체'           },
+        { val: 'unpaid', label: '미납만 보기'     },
         { val: 'long',   label: '3개월 이상 체납' },
-        { val: 'paid',   label: '납부완료'        },
+        { val: 'paid',   label: '납부완료'         },
     ];
     document.getElementById('panelUnpaid').querySelector('.chip-grid').innerHTML =
         opts.map(o =>
@@ -154,13 +154,22 @@ function pickUnpaidFilter(val, label) {
 
 /* ================================================================
    API 재조회 — GET /hometop/api/billing/admin/unpaid
+   Controller 파라미터: year, month, dong, status, overdue, page, size
 ================================================================ */
 async function fetchUnpaidList() {
     const params = new URLSearchParams();
-    if (selYear)   params.set('year',   selYear);
-    if (selMonth)  params.set('month',  String(selMonth).padStart(2, '0'));
-    if (selDong)   params.set('dong',   selDong);
-    if (selFilter) params.set('filter', selFilter);
+
+    if (selYear)  params.set('year',  selYear);
+    if (selMonth) params.set('month', String(selMonth).padStart(2, '0'));
+    if (selDong)  params.set('dong',  selDong);
+
+    // selFilter → Controller 파라미터 변환
+    // Controller: status(UNPAID/PAID), overdue(true/false)
+    if (selFilter === 'unpaid') params.set('status',  'UNPAID');
+    if (selFilter === 'paid')   params.set('status',  'PAID');
+    if (selFilter === 'long')   params.set('overdue', 'true');
+    // 'all' 은 파라미터 없음 (전체 조회)
+
     params.set('page', currentPage);
     params.set('size', 10);
 
@@ -170,7 +179,7 @@ async function fetchUnpaidList() {
         );
         const data = await res.json();
         renderTableBody(data.content);
-        renderPagination(data.currentPage, data.totalPages);
+        renderPagination(data.number, data.totalPages);
     } catch (err) {
         console.error('미납 목록 조회 실패', err);
     }
@@ -198,7 +207,7 @@ function renderTableBody(items) {
         const action = isUnpaid
             ? `<button class="btn-process"
                 data-billing-id="${item.billingId}"
-                data-unit="${item.dong} ${item.ho}"
+                data-unit="${item.unit}"
                 data-month="${item.billingMonth}"
                 onclick="openConfirm(this)">납부완료 처리</button>`
             : `<span class="btn-process done-txt">처리완료</span>`;
@@ -206,7 +215,7 @@ function renderTableBody(items) {
         return `
         <tr class="${isUnpaid ? '' : 'done'}">
             <td>${num}</td>
-            <td>${item.dong} ${item.ho}</td>
+            <td>${item.unit}</td>
             <td>${item.residentName || '—'}</td>
             <td>${item.billingMonth}</td>
             <td>${Number(item.totalAmount).toLocaleString()}원</td>
@@ -266,10 +275,10 @@ function closeConfirm() {
     pendingBilling = null;
 }
 
-/* ── 확인 → PATCH API ── */
+/* ── 확인 → PATCH /api/billing/admin/{billingId}/paid ── */
 async function processPayment() {
     if (!pendingBilling) return;
-    const { billingId, unit, month } = pendingBilling;
+    const { billingId } = pendingBilling;
     closeConfirm();
 
     try {
@@ -283,22 +292,20 @@ async function processPayment() {
 
         if (!res.ok) throw new Error('처리 실패');
 
-        // 해당 행 즉시 업데이트 (API 재조회 없이 UX 즉시 반영)
+        // 해당 행 즉시 업데이트
         const row = document.querySelector(
             `[data-billing-id="${billingId}"]`
         )?.closest('tr');
 
         if (row) {
             row.classList.add('done');
-            // 뱃지 교체
-            const badgeCell = row.querySelector('td:nth-child(7)');
-            if (badgeCell) badgeCell.innerHTML = `<span class="badge badge-paid">PAID</span>`;
-            // 처리 버튼 교체
+            const badgeCell  = row.querySelector('td:nth-child(7)');
             const actionCell = row.querySelector('td:nth-child(8)');
+            if (badgeCell)  badgeCell.innerHTML  = `<span class="badge badge-paid">PAID</span>`;
             if (actionCell) actionCell.innerHTML = `<span class="btn-process done-txt">처리완료</span>`;
         }
 
-        // 통계 카드 갱신 (전체 페이지 fetch 대신 간단히 재조회)
+        // 통계 카드 갱신
         refreshStats();
 
     } catch (err) {
@@ -307,23 +314,27 @@ async function processPayment() {
     }
 }
 
-/* ── 통계 카드 갱신 ── */
+/* ── 통계 카드 갱신 — GET /api/billing/admin/stats ── */
 async function refreshStats() {
-    // 현재 선택된 부과월 기준으로 통계 재조회
     const month = selYear && selMonth
         ? `${selYear}-${String(selMonth).padStart(2, '0')}`
-        : null;
-    if (!month) return;
+        : `${new Date().getFullYear()}-${String(new Date().getMonth()+1).padStart(2,'0')}`;
 
     try {
         const res  = await fetch(
-            `${CONTEXT_PATH}/api/billing/admin/unpaid?year=${selYear}`
-            + (selMonth ? `&month=${String(selMonth).padStart(2,'0')}` : '')
-            + `&page=0&size=1`
+            `${CONTEXT_PATH}/api/billing/admin/stats?billingMonth=${month}`
         );
-        // 통계는 별도 API가 없으므로 페이지 새로고침으로 처리
-        // TODO: 통계 전용 API 추가 후 교체
+        const data = await res.json();
+
+        // 통계 카드 DOM 업데이트
+        const cards = document.querySelectorAll('.stat-card .stat-value');
+        if (cards[0]) cards[0].textContent = data.total   ?? '—';
+        if (cards[1]) cards[1].textContent = data.paid    ?? '—';
+        if (cards[2]) cards[2].textContent = data.unpaid  ?? '—';
+        if (cards[3]) cards[3].textContent = data.paidRate != null
+            ? data.paidRate.toFixed(1) + '%' : '—';
+
     } catch (err) {
-        // 통계 갱신 실패는 무시 (다음 필터 변경 시 자동 갱신)
+        console.error('통계 갱신 실패', err);
     }
 }

@@ -159,6 +159,13 @@ public class BillingService {
                 .actionType(BillingActionType.STATUS_CHANGE)
                 .build());
     }
+    // ─────────────────────────────────────────────
+    // 관리자: 엑셀 업로드 중복시 팝업창
+    // ─────────────────────────────────────────────
+
+    public boolean existsByBillingMonth(String billingMonth) {
+        return billingRepository.existsByBillingMonth(billingMonth);
+    }
 
     // ─────────────────────────────────────────────
     // 관리자: 미납 세대 목록

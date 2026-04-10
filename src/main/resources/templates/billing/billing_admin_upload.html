@@ -147,12 +147,12 @@
 
 <script th:inline="javascript">
     /*<![CDATA[*/
-    const CONTEXT_PATH = /*[[${#request.contextPath}]]*/ '/hometop';
+    const CONTEXT_PATH = /*[[${contextPath}]]*/ '/hometop';
     const CSRF_TOKEN   = document.querySelector('meta[name="_csrf"]')?.content;
     const CSRF_HEADER  = document.querySelector('meta[name="_csrf_header"]')?.content;
     /*]]>*/
 </script>
-<script src="/js/billing_upload.js" th:src="@{/js/billing_upload.js}"></script>
+<script src="/billing/js/billing_upload.js" th:src="@{/billing/js/billing_upload.js}"></script>
 
 </body>
 </html>

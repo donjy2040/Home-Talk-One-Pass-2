@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/billing")
@@ -118,6 +119,18 @@ public class BillingApiController {
             @RequestBody List<UploadRow> rows
     ) {
         return ResponseEntity.ok(billingUploadService.validateAndPreview(rows));
+    }
+
+    /**
+     * 부과월 중복 확인
+     * GET /api/billing/admin/upload/check?billingMonth=2026-03
+     */
+    @GetMapping("/admin/upload/check")
+    public ResponseEntity<Map<String, Boolean>> checkDuplicate(
+            @RequestParam String billingMonth
+    ) {
+        boolean exists = billingService.existsByBillingMonth(billingMonth);
+        return ResponseEntity.ok(Map.of("exists", exists));
     }
 
     /**

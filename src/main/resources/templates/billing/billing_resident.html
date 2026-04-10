@@ -161,8 +161,8 @@
                         <div th:classappend="${isUnpaid} ? '' : 'paid-text'"
                              class="bp-item-due"
                              th:text="${isUnpaid}
-                           ? '납부기한 ' + ${#temporals.format(b.dueDate, 'yyyy.MM.dd')}
-                           : '납부일 '   + ${#temporals.format(b.paidAt,  'yyyy.MM.dd')}">
+                                    ? '납부기한 ' + ${#temporals.format(b.dueDate, 'yyyy.MM.dd')}
+                                    : '납부 완료'"
                             납부기한 2026.03.31
                         </div>
                     </div>
@@ -261,10 +261,11 @@ POST 요청 없으면 생략 가능
 <!-- 서버에서 내려준 로그인 세대 정보를 JS 변수로 노출 -->
 <script th:inline="javascript">
     /*<![CDATA[*/
-    const UNIT_INFO   = /*[[${unitInfo}]]*/ '101동 1204호';
-    const HOUSEHOLD_ID = /*[[${householdId}]]*/ 'H_001';
-    const CSRF_TOKEN  = document.querySelector('meta[name="_csrf"]')?.content;
-    const CSRF_HEADER = document.querySelector('meta[name="_csrf_header"]')?.content;
+    const CONTEXT_PATH = /*[[${#request.contextPath}]]*/ '/hometop';
+    const UNIT_INFO    = /*[[${unitInfo}]]*/ '101동 1204호';
+    const HOUSEHOLD_ID = /*[[${householdId}]]*/ '';
+    const CSRF_TOKEN   = document.querySelector('meta[name="_csrf"]')?.content;
+    const CSRF_HEADER  = document.querySelector('meta[name="_csrf_header"]')?.content;
     /*]]>*/
 </script>
 

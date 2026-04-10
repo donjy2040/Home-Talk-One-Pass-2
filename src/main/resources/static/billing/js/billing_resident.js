@@ -1,8 +1,3 @@
-// 필터 변경 시 GET /api/billing 재조회
-// → 목록 교체, 고지서 보기 클릭 시
-// GET /api/billing/{id}/detail
-// → 모달 렌더링
-
 /* ================================================================
    billing_resident.js
    입주민 관리비 페이지 동작
@@ -17,7 +12,7 @@
 /* ── 상수 ────────────────────────────────────────────────────── */
 const YEARS  = [2026,2025,2024,2023,2022,2021,2020,2019,2018];
 const MONTHS = ['1월','2월','3월','4월','5월','6월','7월','8월',
-    '9월','10월','11월','12월'];
+                '9월','10월','11월','12월'];
 
 /* ── 상태 ────────────────────────────────────────────────────── */
 let selYear   = new Date().getFullYear();
@@ -142,9 +137,9 @@ async function fetchBillings() {
     if (selStatus) params.set('status', selStatus);
 
     try {
-        const res  = await fetch(`${CONTEXT_PATH}/api/billing?${params.toString()}`);
+        const res  = await fetch(`${CONTEXT_PATH}/api/billing/list?${params.toString()}`);
         const data = await res.json();
-        allBillings = data;
+        allBillings = data.content ?? data;
         renderList();
     } catch (err) {
         console.error('관리비 목록 조회 실패', err);
@@ -175,7 +170,7 @@ function renderList() {
 
         const dueText = isUnpaid
             ? `납부기한 ${formatDate(b.dueDate)}`
-            : `납부일 ${formatDate(b.paidAt)}`;
+            : '납부 완료';
 
         return `
         <div class="bp-item${isOverdue ? ' overdue' : ''}">
@@ -252,8 +247,8 @@ function renderModal(data) {
         box.innerHTML = `
             <div class="bm-status-title">납부 완료되었습니다.</div>
             ${data.paidAt
-            ? `<div class="bm-status-sub">납부일: ${formatDate(data.paidAt)}</div>`
-            : ''}`;
+                ? `<div class="bm-status-sub">납부일: ${formatDate(data.paidAt)}</div>`
+                : ''}`;
     } else if (isPastDue) {
         box.className = 'bm-status-box past';
         box.innerHTML = `

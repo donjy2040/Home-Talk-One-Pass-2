@@ -47,6 +47,9 @@ public interface BillingRepository extends JpaRepository<Billing, Long> {
             """)
     Optional<Billing> findLatestUnpaidByHouseholdId(@Param("householdId") Long householdId);
 
+    // 관리자 업로드 중복시 팝업 메서드
+    boolean existsByBillingMonth(String billingMonth);
+
     // 관리자 미납 목록 (필터 + 페이징)
     @Query("""
             SELECT b FROM Billing b
