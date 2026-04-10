@@ -1,7 +1,7 @@
 package com.hometalk.onepass.billing.repository;
 
 import com.hometalk.onepass.billing.entity.Billing;
-import com.hometalk.onepass.billing.entity.Billing.BillingStatus;
+import com.hometalk.onepass.billing.entity.BillingStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

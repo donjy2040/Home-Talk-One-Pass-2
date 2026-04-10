@@ -274,7 +274,7 @@ async function processPayment() {
 
     try {
         const res = await fetch(
-            `${CONTEXT_PATH}/api/billing/admin/${billingId}/pay`,
+            `${CONTEXT_PATH}/api/billing/admin/${billingId}/paid`,
             {
                 method:  'PATCH',
                 headers: { [CSRF_HEADER]: CSRF_TOKEN },

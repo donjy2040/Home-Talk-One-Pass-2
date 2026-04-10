@@ -1,7 +1,7 @@
 package com.hometalk.onepass.billing.repository;
 
 import com.hometalk.onepass.billing.entity.BillingLog;
-import com.hometalk.onepass.billing.entity.BillingLog.BillingActionType;
+import com.hometalk.onepass.billing.entity.BillingActionType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

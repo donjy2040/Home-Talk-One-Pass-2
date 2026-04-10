@@ -3,7 +3,7 @@ package com.hometalk.onepass.billing.controller;
 import com.hometalk.onepass.billing.dto.BillingDetailResponse;
 import com.hometalk.onepass.billing.dto.BillingSummaryResponse;
 import com.hometalk.onepass.billing.dto.ResidentBillingResponse;
-import com.hometalk.onepass.billing.entity.Billing.BillingStatus;
+import com.hometalk.onepass.billing.entity.BillingStatus;
 import com.hometalk.onepass.billing.service.BillingService;
 import com.hometalk.onepass.billing.service.BillingService.AdminBillingStats;
 import com.hometalk.onepass.billing.service.BillingUploadService;

@@ -4,9 +4,9 @@ import com.hometalk.onepass.billing.dto.BillingDetailResponse;
 import com.hometalk.onepass.billing.dto.BillingSummaryResponse;
 import com.hometalk.onepass.billing.dto.ResidentBillingResponse;
 import com.hometalk.onepass.billing.entity.Billing;
-import com.hometalk.onepass.billing.entity.Billing.BillingStatus;
+import com.hometalk.onepass.billing.entity.BillingStatus;
 import com.hometalk.onepass.billing.entity.BillingLog;
-import com.hometalk.onepass.billing.entity.BillingLog.BillingActionType;
+import com.hometalk.onepass.billing.entity.BillingActionType;
 import com.hometalk.onepass.billing.repository.BillingDetailRepository;
 import com.hometalk.onepass.billing.repository.BillingLogRepository;
 import com.hometalk.onepass.billing.repository.BillingRepository;
@@ -185,6 +185,7 @@ public class BillingService {
                         b,
                         b.getHousehold().getUsers().get(0).getName()  // 대표 입주민명
                 ));
+
     }
 
     // 관리자 통계

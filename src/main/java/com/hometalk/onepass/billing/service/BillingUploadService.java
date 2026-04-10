@@ -1,15 +1,15 @@
 package com.hometalk.onepass.billing.service;
 
 import com.hometalk.onepass.billing.entity.Billing;
-import com.hometalk.onepass.billing.entity.Billing.BillingStatus;
+import com.hometalk.onepass.billing.entity.BillingStatus;
 import com.hometalk.onepass.billing.entity.BillingDetail;
 import com.hometalk.onepass.billing.entity.BillingLog;
-import com.hometalk.onepass.billing.entity.BillingLog.BillingActionType;
+import com.hometalk.onepass.billing.entity.BillingActionType;
 import com.hometalk.onepass.billing.repository.BillingDetailRepository;
 import com.hometalk.onepass.billing.repository.BillingLogRepository;
 import com.hometalk.onepass.billing.repository.BillingRepository;
 import com.hometalk.onepass.auth.entity.Household;
-import com.hometalk.onepass.auth.repository.HouseholdRepository;
+//import com.hometalk.onepass.auth.repository.HouseholdRepository;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class BillingUploadService {
     private final BillingRepository       billingRepository;
     private final BillingDetailRepository billingDetailRepository;
     private final BillingLogRepository    billingLogRepository;
-    private final HouseholdRepository     householdRepository;
+    //private final HouseholdRepository     householdRepository;
 
     // ─────────────────────────────────────────────
     // 유효성 검사 + 미리보기
@@ -84,9 +84,9 @@ public class BillingUploadService {
 
             if (validate(row) != null) continue;
 
-            Household household = householdRepository.findById(row.getHouseholdId())
-                    .orElseThrow(() -> new IllegalArgumentException(
-                            "존재하지 않는 세대입니다. id=" + row.getHouseholdId()));
+        //    Household household = householdRepository.findById(row.getHouseholdId())
+        //            .orElseThrow(() -> new IllegalArgumentException(
+        //                    "존재하지 않는 세대입니다. id=" + row.getHouseholdId()));
 
             Optional<Billing> existing = billingRepository
                     .findByHousehold_IdAndBillingMonth(
@@ -102,24 +102,27 @@ public class BillingUploadService {
                 updateCount++;
             } else {
                 // INSERT
-                billing = billingRepository.save(Billing.builder()
-                        .household(household)
-                        .billingMonth(row.getBillingMonth())
-                        .dueDate(row.getDueDate())
-                        .totalAmount(row.getTotalAmount())
-                        .status(BillingStatus.UNPAID)
-                        .build());
-                insertCount++;
-            }
+//                billing = billingRepository.save(Billing.builder()
+//                        .household(household)
+//                        .billingMonth(row.getBillingMonth())
+//                        .dueDate(row.getDueDate())
+//                        .totalAmount(row.getTotalAmount())
+//                        .status(BillingStatus.UNPAID)
+//                        .build());
+//                insertCount++;
+//            }
 
             // billing_details 저장
-            List<BillingDetail> details = row.getItems().stream()
-                    .map(item -> BillingDetail.builder()
-                            .billing(billing)
-                            .itemName(item.getItemName())
-                            .itemAmount(item.getItemAmount())
-                            .build())
-                    .toList();
+            List<BillingDetail> details = new ArrayList<>();
+            List<ItemRow> items = row.getItems();
+            for (int i = 0; i < items.size(); i++) {
+                details.add(BillingDetail.builder()
+                        .billing(billing)
+                        .itemName(items.get(i).getItemName())
+                        .itemAmount(items.get(i).getItemAmount())
+                        .sortOrder(i)
+                        .build());
+            }
             billingDetailRepository.saveAll(details);
 
             // billing_logs UPLOAD 기록

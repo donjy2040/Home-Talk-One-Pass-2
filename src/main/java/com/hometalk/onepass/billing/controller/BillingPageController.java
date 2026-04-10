@@ -2,7 +2,7 @@ package com.hometalk.onepass.billing.controller;
 
 import com.hometalk.onepass.billing.dto.BillingSummaryResponse;
 import com.hometalk.onepass.billing.dto.ResidentBillingResponse;
-import com.hometalk.onepass.billing.entity.Billing.BillingStatus;
+import com.hometalk.onepass.billing.entity.BillingStatus;
 import com.hometalk.onepass.billing.service.BillingService.AdminBillingStats;
 
 import com.hometalk.onepass.billing.service.BillingService;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Controller
 @RequestMapping("/billing")
@@ -38,20 +39,18 @@ public class BillingPageController {
         ResidentBillingResponse response = billingService.getResidentBillingPage(householdId);
 
         // HTML 변수명에 맞춰 개별로 넘기기
-        model.addAttribute("unpaidList", response.getBillings().stream()
-                .filter(b -> b.getStatus().name().equals("UNPAID"))
-                .toList());
-        model.addAttribute("currentMonthBilling", response.getBillings().stream()
-                .filter(b -> b.getBillingMonth().equals(
-                        LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM"))))
-                .findFirst().orElse(null));
-        model.addAttribute("currentMonthLabel",
-                LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy년 M월")));
-        model.addAttribute("unpaidCount",  response.getUnpaidCount());
-        model.addAttribute("unpaidMonths", response.getBillings().stream()
-                .filter(b -> b.getStatus().name().equals("UNPAID"))
+        List<BillingSummaryResponse> unpaidList = billingService
+                .getBillingList(householdId, null, null, BillingStatus.UNPAID,
+                        PageRequest.of(0, 12, Sort.by(Sort.Direction.DESC, "billingMonth")))
+                .getContent();
+        model.addAttribute("unpaidList",    unpaidList);
+        model.addAttribute("unpaidMonths",  unpaidList.stream()
                 .map(BillingSummaryResponse::getBillingMonth)
                 .toList());
+        model.addAttribute("currentMonthAmount", response.getCurrentMonthAmount());
+        model.addAttribute("currentMonthLabel",
+                LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy년 M월")));
+        model.addAttribute("unpaidCount",   response.getUnpaidCount());
         model.addAttribute("latestPaidDate", response.getLastPaidDate() != null
                 ? response.getLastPaidDate()
                 .format(DateTimeFormatter.ofPattern("yyyy.MM.dd"))

@@ -56,9 +56,9 @@
             <div class="bp-card">
                 <div class="bp-card-label">이번 달 청구액</div>
                 <div class="bp-card-value"
-                     th:text="${currentMonthBilling != null}
-                       ? ${#numbers.formatInteger(currentMonthBilling.totalAmount, 0, 'COMMA') + '원'}
-                       : '—'">
+                     th:text="${currentMonthAmount != null}
+                            ? ${#numbers.formatInteger(currentMonthAmount, 0, 'COMMA') + '원'}
+                            : '—'"
                     128,500원
                 </div>
                 <div class="bp-card-sub" th:text="${currentMonthLabel}">2026년 3월</div>
