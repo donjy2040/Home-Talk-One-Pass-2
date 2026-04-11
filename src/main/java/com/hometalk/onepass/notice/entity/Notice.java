@@ -18,7 +18,8 @@ public class Notice extends BaseTimeEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    private boolean isPinned;
+    private Boolean isPinned;
+
     private int viewCount;
 
     @Enumerated(EnumType.STRING)
