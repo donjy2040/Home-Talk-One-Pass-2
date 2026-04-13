@@ -4,32 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>입주자 차량 등록</title>
-  <link rel="stylesheet" href="/css/main.css" th:href="@{/css/dashboard/style.css}">
   <style>
     /* CSS는 나중에 추가 */
   </style>
+  <link rel="stylesheet" th:href="@{/css/dashboard/style.css}">
 </head>
 <body>
 
   <div class="main-layout" style="display: flex;">
 
     <!-- 1. 왼쪽 사이드바 -->
-    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    <div th:replace="~{fragments/sidebar :: sidebar(currentPage='parking')}"></div>
 
     <!-- 2. 오른쪽 영역 (헤더 + 본문) -->
     <div class="main-wrapper" style="flex: 1; display: flex; flex-direction: column;">
 
       <!-- 상단 헤더 -->
-      <div th:replace="~{fragments/header :: header}"></div>
+      <div th:replace="~{fragments/header_menu :: header_menu(currentPath01='parking', currentPath02='register')}"></div>
 
       <!-- 상단 메뉴 -->
       <div th:replace="~{fragments/header-menu/parkingCategoryMenu :: categoryMenu}"></div>
 
       <!-- 메인 콘텐츠 -->
       <main class="content">
-        <div style="min-height: 882px;">
-
-          <div class="container">
+        <div class="container">
           <h2 class="page-title">입주자 차량 등록</h2>
 
           <form id="vehicleForm" th:action="@{/parking/vehicle/register}" method="post" enctype="multipart/form-data">
@@ -112,7 +110,6 @@
             </div>
 
           </form>
-        </div>
         </div>
       </main>
 

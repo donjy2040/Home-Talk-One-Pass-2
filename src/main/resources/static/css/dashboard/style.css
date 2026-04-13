@@ -157,7 +157,7 @@ body {
     메인 켄텐츠 (.content)
 */
 
-.main-layout .content { max-width: 1000px; margin: 0 auto; padding: 2rem; flex: 1; }
+.main-layout .content { max-width: 100%; min-height: 882px; margin: 0 auto; padding: 2rem; flex: 1; }
 .main-layout .content h1 { text-align: center; margin-bottom: 1.5rem; }
 
 /*.content {*/
