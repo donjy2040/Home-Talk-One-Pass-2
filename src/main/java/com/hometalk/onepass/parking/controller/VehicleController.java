@@ -30,7 +30,7 @@ public class VehicleController {
         Long householdId = null; // TODO: JWT 연동 후 추출
         List<VehicleResponse> vehicles = vehicleService.getHouseholdVehicles(householdId);
         model.addAttribute("vehicles", vehicles);
-        model.addAttribute("menu", "parking");
+        //model.addAttribute("menu", "parking");
         return "parking/vehicle-status";
     }
 
@@ -38,7 +38,7 @@ public class VehicleController {
     @GetMapping("/vehicle/register")
     public String vehicleRegisterPage(Model model) {
 
-        model.addAttribute("menu", "parking");
+        //model.addAttribute("menu", "parking");
         return "parking/vehicle-register";
     }
 
