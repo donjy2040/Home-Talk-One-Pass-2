@@ -13,9 +13,6 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
     Optional<Notice> findFirstByIdLessThanOrderByIdDesc(Long id);
     Optional<Notice> findFirstByIdGreaterThanOrderByIdAsc(Long id);
 
-    // 상단 고정 + 페이지네이션
-    Page<Notice> findAll(Pageable pageable);
-
     // 제목, 내용 키워드 검색 + 페이지네이션
     Page<Notice> findByTitleContainingOrContentContaining(String title, String content, Pageable pageable);
 }

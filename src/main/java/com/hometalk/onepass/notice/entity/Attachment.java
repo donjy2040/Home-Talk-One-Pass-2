@@ -15,7 +15,7 @@ public class Attachment extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "notice_id")
-    private Notice notice;  // Long noticeId → Notice notice로 교체
+    private Notice notice;
 
     private String fileName;
     private String filePath;
