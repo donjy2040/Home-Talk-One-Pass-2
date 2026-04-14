@@ -7,26 +7,24 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/auth")
 public class AuthController {
 
     private final UserRepository userRepository;
     private final SignUpService signUpService;
 
-    @GetMapping("/auth")
+    @GetMapping("")
     public String Auth() {
         return "auth/login";
     }
 
 
-    @GetMapping("/auth/register")
+    @GetMapping("register")
     public String Resister(Model model) {
         // step = 1로 초기값 설정
         model.addAttribute("step", 1);
@@ -37,7 +35,7 @@ public class AuthController {
         return "auth/register";
     }
 
-    @PostMapping("/auth/register/signup")   // 회원가입 단계별 목록 처리
+    @PostMapping("register/signup")   // 회원가입 단계별 목록 처리
     public String signup(
             @ModelAttribute("signUpDTO") SignUpDTO signUpDTO,      // DTO
             @RequestParam(required = false, defaultValue = "next") String action, // 버튼 상태
@@ -57,7 +55,7 @@ public class AuthController {
         if ("complete".equals(action)) {
             // 최종 서비스 로직 호출 (회원가입 처리)
             signUpService.signUp(signUpDTO);
-            return "redirect:/auth/login";
+            return "redirect:/auth";
         }
 
         return "auth/register";

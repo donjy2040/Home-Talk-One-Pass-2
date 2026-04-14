@@ -20,6 +20,5 @@ public class SignUpDTO {
     private String buildingName;
     private String dong;
     private String ho;
-    private String moveInDate;
-    private String PostNum;
+    private String postNum;
 }
