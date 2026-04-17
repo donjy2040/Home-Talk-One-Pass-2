@@ -1,50 +1,58 @@
 package com.hometalk.onepass.inquiry.entity;
 
+import com.hometalk.onepass.auth.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@Table(name = "kjh_inquiry")
 public class Inquiry {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String memberId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column(nullable = false)
-    private String title;
+    public void setUser(User user) { this.user = user; }
 
     private String category;
-
-    @Column(columnDefinition = "TEXT", nullable = false)
+    private String title;
     private String content;
-
+    private String status; // 미답변, 처리중, 완료 등
     private String answer;
-
-    // 기본값을 '미답변'으로 설정
-    @Builder.Default
-    private String status = "미답변";
 
     private LocalDateTime createdAt;
 
-    // DB에 처음 저장될 때 현재 시간을 자동으로 넣어줌
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
+        if (this.status == null) this.status = "미답변";
     }
 
-    /**
-     * 답변 등록 및 상태 변경 메소드
-     */
-    public void addAnswer(String answer) {
+    @Builder.Default
+    @OneToMany(mappedBy = "inquiry", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<InquiryAttachment> attachments = new ArrayList<>();
+
+
+    public void updateAnswer(String answer) {
         this.answer = answer;
-        this.status = "답변완료";
+        this.status = "완료"; // 답변이 달리면 자동으로 상태 변경
+    }
+
+
+    public void addAttachment(InquiryAttachment attachment) {
+        this.attachments.add(attachment);
+        if (attachment.getInquiry() != this) {
+            attachment.setInquiry(this);
+        }
     }
 }
